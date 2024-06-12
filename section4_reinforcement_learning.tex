@@ -20,7 +20,11 @@ The Fetch Reach environment served as a starting point for this research but end
 
 \subsubsection{Starting State}
 
-\textcolor{red}{currently it is fixed but I hope I can make it random soon!}
+To set up a new episode during training, the robot state and the goal position and orientation in the environment are reset.
+
+For the goal, the position is sampled from a uniform distribution corresponding to the volume \SI{10}{\cm} to \SI{60}{\cm} above the table in front of the robot. The orientation is sampled from a uniform distribution in RPY format and then converted to quaternions. The orientation is then validated to check if it is facing mostly forward and downwards, which is the orientation that the gripper should have to pick up an object. If the orientation is not valid, a new one is sampled until a valid one is found.
+
+For the starting state of the robot there are two possibilities: it can start in the fixed position shown in \autoref{fig:larcc_env} or in a random position. The random position is obtained by sampling the joint positions from a uniform distribution in the $[-\pi, \pi]$ interval, which is the same interval used for the joint limits in the UR10e robot. However, given that a fully random starting position can make the task too difficult, the end-effector position and orientation from the random starting position is validated with the same constraints as the goal position and a new starting position is sampled until a valid one is found.
 
 \subsubsection{Observation Space}
 
@@ -38,21 +42,37 @@ The action space represents the displacements in all joints for a single timeste
 
 \subsubsection{Rewards}
 
-\textcolor{red}{(there is probably a better term than dense)}
-The used environment has dense rewards, which means that in every timestep the reward will increase if the the end-effector is closer to the goal and decrease otherwise, helping the model learn which actions lead to a successful episode. The reward in each timestep is obtained from the following rewards:
+The used environment has dense rewards so as to give the agent frequent and consistent feedback about its actions. This means that in every timestep the reward will increase if the the end-effector is closer to the goal and decrease otherwise, helping the model learn which actions lead to a successful episode. The reward in each timestep is obtained from the following rewards:
 
 \begin{itemize}
     \item $position$: $1-distance(goal\_pos, end$-$effector\_pos)$ if distance lower than 2 otherwise $-1$ so that it is normalized;
     \item $orientation$: $max(innerproduct(goal\_quaternion, end$-$effector\_quaternion), innerproduct(-goal\_quaternion, end$-$effector\_quaternion)$;
-    \item $bonus$: $1$ if goal has been reached else $0$.
+    \item $bonus$: $1$ if goal has been reached else $0$; the goal is considered reached if both the other rewards are above $0.98$.
 \end{itemize}
 
 These rewards affect the final timestep reward with different weights, but the sum of the weights is always equal to $1$ keeping the final reward in the $[-1, 1]$ range.
 
-\subsection{Models}
+\subsection{Soft Actor-Critic (SAC) Model}
 
-\subsubsection{Deep Q-Learning (DQN)}
-
-\subsubsection{Soft Actor-Critic (SAC)}
+\textcolor{blue}{The tests in the described environment were executed using the Soft Actor-Critic (SAC) algorithm. SAC is an off-policy model-free reinforcement learning algorithm that is based on the maximum entropy reinforcement learning framework. This framework allows the agent to learn a policy that maximizes the expected reward while also maximizing the entropy of the policy. This means that the agent will not only try to maximize the reward but also to explore the environment as much as possible. The entropy term in the loss function is weighted by a temperature parameter $\alpha$ which is learned by the model.}
 
 \subsection{Results}
+
+A SAC model was trained on the developed environment with a fixed initial robot state and with a $0.5$ weight on the position reward and a $0.25$ weight on the orientation and on the bonus reward. The model was trained with early stopping configured to evaluate the model every $500$ episodes and stop training if the evaluation average reward does not increase for $20$ evaluations. \autoref{tab:sac_results} shows the results when the best model was saved.
+
+\begin{table}[ht] 
+\centering
+\caption{SAC Results when the Best Model was Saved}
+\label{tab:sac_results}
+\begin{tabular}{ccc}
+\toprule
+\multirow{2}{0.25\textwidth}{\centering Training Episodes} & \multirow{2}{0.25\textwidth}{\centering Training Episode Reward Mean} & \multirow{2}{0.25\textwidth}{\centering Validation Episode Reward Mean} \\
+& & \\
+\midrule
+53500 & 42.9 & 45.3\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Considering that the maximum reward in a single episode is $50$, the model was able to reach a reward close to the maximum. Additionally, the fact that the validation reward is higher than the training reward is expected given that the in the trainig episodes the model attempts to explore the environment according to its entropy while in the validation episodes the model takes the best actions according to its learned policy.
+
