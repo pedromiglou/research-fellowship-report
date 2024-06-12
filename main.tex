@@ -1,0 +1,84 @@
+\documentclass{report}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage[pdftex]{graphicx}
+\usepackage{amsmath}
+\usepackage[pdftex]{hyperref}
+\usepackage{tabularx}
+\usepackage{xcolor} % for \textcolor
+\usepackage{siunitx} % for SI units
+\usepackage{amsfonts} % for things like \mathbb
+\usepackage{booktabs} % for \toprule,...
+\usepackage{subcaption} % for \captionsetup
+\usepackage{adjustbox} % for \adjincludegraphics
+\usepackage{multirow} % for multirow tables
+\usepackage[backend=biber, style=ieee, sorting=none, natbib=true, mincitenames=1, maxcitenames=2]{biblatex} % biblatex config like in the dissertation
+\bibliography{refs}
+\usepackage[inkscapeformat=pdf]{svg} % svg support
+
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png,.PNG}
+
+% \DeclareUnicodeCharacter{2212}{-} % fix error LaTeX Error: Unicode character − (U+2212)
+
+\title{Aprendizagem por reforço para antecipar a intenção humana em tarefas colaborativas}
+\author{Pedro Miguel Loureiro Amaral}
+\date{15 de junho de 2024}
+
+\begin{document}
+
+\maketitle
+
+\renewcommand\thesection{\arabic{section}}
+
+\input{section1_introduction.tex}
+\input{section2_setup.tex}
+\input{section3_grasping_recognition}
+\input{section4_reinforcement_learning}
+\input{section5_conclusion}
+
+\color{red}
+
+\section{Plano Inicial de Atividades (To Remove)}
+
+Bolseiro: Pedro Miguel Loureiro Amaral
+
+Orientadores: Filipe Miguel Teixeira Pereira da Silva; Vitor Manuel Ferreira dos Santos
+
+Duração /início e fim do contrato: 6 meses – 16/01/2024 a 15/07/2024
+
+Projeto: UIDB/00127/2020
+
+Centro de custos: 3.62.80.11
+
+Local de trabalho: Instituto de Engenharia Eletrónica e Informática de Aveiro (IEETA)
+
+Título plano de trabalhos: Aprendizagem por reforço para antecipar a intenção humana em tarefas colaborativas
+
+Contexto e objetivo da bolsa: A aprendizagem por reforço oferece uma metodologia para desenvolver políticas que maximizam a eficiência da colaboração humano-robô, levando em consideração as ações e intenções humanas. O plano de atividades visa a integração destas metodologias com ferramentas computacionais desenvolvidos no âmbito do projeto Augmanity (https://www.augmanity.pt). Neste contexto, o objetivo da bolsa está centrado no desenvolvimento de um sistema robótico capaz de antecipar as ações e/ou intenções de um operador humano durante a realização de tarefas colaborativas usando técnicas de aprendizagem por reforço, tendo em vista melhorar a eficiência e a segurança dos parceiros envolvidos.
+
+Tarefas a desenvolver:
+
+T1.Tarefa 1 – Levantamento do estado atual de conhecimento das tecnologias e metodologias associadas à capacidade de antecipação em robótica colaborativa.
+
+T2.Tarefa 2 – Desenvolvimento de uma solução integrada baseada em técnicas de aprendizagem por reforço que permitam a um robô melhorar as suas capacidades para anticipar as ações e/ou intenções humanas.
+
+T3.Tarefa 3 - Teste e avaliação de vários algoritmos de aprendizagem por reforço aplicados em diferentes cenários em ambientes reais.
+
+T4.Tarefa 4 – Escrita de documentação relevante e preparação de um protótipo demonstrador.
+
+\color{black}
+
+\textcolor{red}{Where should I describe the hand following?}
+
+\begingroup
+\renewcommand{\bibfont}{\footnotesize}
+% Redefine References name to Portuguese
+% Change if you are using english
+\defbibheading{bibliography}[References]{
+	\section{#1}
+}
+\setlength\bibitemsep{8pt}
+\printbibliography[heading=bibliography]
+\endgroup
+
+\end{document}
