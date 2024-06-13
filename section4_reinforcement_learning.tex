@@ -150,3 +150,9 @@ With the best weights defined, an attempt was made to train the model with a ran
     \caption{SAC Success Rate during Training (Random Starting Position)}
     \label{fig:success_rate_rp}
 \end{figure}
+
+\subsection{ROS Integration}
+
+The trained model was integrated with the ROS environment to test the model in the real collaborative cell. This integration was done by using a docker container with ROS Noetic, stablebaselines3, and Gymnasium. The model was loaded and whenever a new goal was received from the ROS environment, the model would predict the actions to reach the goal. The sum of the actions was then sent to the ROS environment which would move the robot. This solution still needs to be improved to allow for a more direct integration with the Ur10e given that the current solution does not work with real-time feedback and still relies on MoveIt! to communicate with the robot.
+
+\textcolor{red}{An image might be useful for visualization}
