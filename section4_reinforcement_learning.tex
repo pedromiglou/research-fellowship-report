@@ -106,19 +106,47 @@ A SAC model was trained on the developed environment with a fixed initial robot 
     \label{fig:success_rate}
 \end{figure}
 
-\autoref{tab:sac_results} shows the results when the best model was saved.
+As said before, the graphs above correspond to the model trained with a $0.5$ weight on the position reward and a $0.25$ weight on the orientation and on the bonus reward. Further testing was done with the model to check which would be the best weights to balance the position and orientation reward components. \autoref{tab:sac_results_weights} shows the results for all tested weights, when the highest validation mean episode reward was recorded. The results show that the best weights are a $0.5$ weight on the position reward and a $0.25$ weight on the orientation reward, which is the same as the initial model. The other tested weights resulted in not only lower rewards but also on longer trainings.
 
-\begin{table}[ht] 
+\begin{table}[H]%[ht] 
 \centering
-\caption{SAC Results when the Best Model was Saved}
-\label{tab:sac_results}
-\begin{tabular}{ccc}
+\caption{SAC Results with Different Reward Component Weights}
+\label{tab:sac_results_weights}
+\begin{tabular}{cccc}
 \toprule
-\multirow{2}{0.25\textwidth}{\centering Training Episodes} & \multirow{2}{0.25\textwidth}{\centering Training Episode Reward Mean} & \multirow{2}{0.25\textwidth}{\centering Validation Episode Reward Mean} \\
-& & \\
+\multirow{2}{0.23\textwidth}{\centering Weights} & \multirow{2}{0.16\textwidth}{\centering Training Episodes} & \multirow{2}{0.22\textwidth}{\centering Training Episode Reward Mean} & \multirow{2}{0.24\textwidth}{\centering Validation Episode Reward Mean} \\
+& & & \\
 \midrule
-53500 & 42.9 & 45.3\\
+\multirow{2}{0.23\textwidth}{\centering position: 0.5 orientation: 0.25} & \multirow{2}{0.16\textwidth}{\centering 53500} & \multirow{2}{0.22\textwidth}{\centering 42.9} & \multirow{2}{0.24\textwidth}{\centering 45.3} \\
+& & & \\
+\midrule
+\multirow{2}{0.23\textwidth}{\centering position: 0.44 orientation: 0.31} & \multirow{2}{0.16\textwidth}{\centering 83500} & \multirow{2}{0.22\textwidth}{\centering 32.0} & \multirow{2}{0.24\textwidth}{\centering 33.2} \\
+& & & \\
+\midrule
+\multirow{2}{0.23\textwidth}{\centering position: 0.375 orientation: 0.375} & \multirow{2}{0.16\textwidth}{\centering 98000} & \multirow{2}{0.22\textwidth}{\centering 32.9} & \multirow{2}{0.24\textwidth}{\centering 34.3} \\
+& & & \\
+\midrule
+\multirow{2}{0.23\textwidth}{\centering position: 0.31 orientation: 0.44} & \multirow{2}{0.16\textwidth}{\centering 77500} & \multirow{2}{0.22\textwidth}{\centering 31.7} & \multirow{2}{0.24\textwidth}{\centering 32.7} \\
+& & & \\
+\midrule
+\multirow{2}{0.23\textwidth}{\centering position: 0.25 orientation: 0.5} & \multirow{2}{0.16\textwidth}{\centering 81000} & \multirow{2}{0.22\textwidth}{\centering 32.3} & \multirow{2}{0.24\textwidth}{\centering 32.9} \\
+& & & \\
 \bottomrule
 \end{tabular}
 \end{table}
 
+With the best weights defined, an attempt was made to train the model with a random but valid starting position. The results were significantly worse than using a fixed starting position. \autoref{fig:reward_rp} and \autoref{fig:success_rate} shows the evolution of the episode reward mean and the success rate. The model was not able to reach a reward close to the maximum and the success rate peaked at $0.5$ around the 170000 training episodes and then decreased until 0 as the reward slowly decreased. 
+
+\begin{figure}[H]%[ht]
+    \centering
+    {\fontsize{8}{11}\selectfont\includesvg[width=\textwidth]{figs/random_pos_reward.svg}}
+    \caption{SAC Success Rate during Training (Random Starting Position)}
+    \label{fig:reward_rp}
+\end{figure}
+
+\begin{figure}[H]%[ht]
+    \centering
+    {\fontsize{8}{11}\selectfont\includesvg[width=\textwidth]{figs/random_pos_success_rate.svg}}
+    \caption{SAC Success Rate during Training (Random Starting Position)}
+    \label{fig:success_rate_rp}
+\end{figure}
