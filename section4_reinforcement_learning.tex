@@ -58,7 +58,55 @@ These rewards affect the final timestep reward with different weights, but the s
 
 \subsection{Results}
 
-A SAC model was trained on the developed environment with a fixed initial robot state and with a $0.5$ weight on the position reward and a $0.25$ weight on the orientation and on the bonus reward. The model was trained with early stopping configured to evaluate the model every $500$ episodes and stop training if the evaluation average reward does not increase for $20$ evaluations. \autoref{tab:sac_results} shows the results when the best model was saved.
+A SAC model was trained on the developed environment with a fixed initial robot state and with a $0.5$ weight on the position reward and a $0.25$ weight on the orientation and on the bonus reward. The model was trained with early stopping configured to evaluate the model every $500$ episodes and stop training if the evaluation average reward does not increase for $20$ evaluations. \autoref{fig:actor_loss} and \autoref{fig:critic_loss} show the evolution of the actor and critic loss during training.
+
+\begin{figure}[H]%[ht]
+    \centering
+    {\fontsize{8}{11}\selectfont\includesvg[width=\textwidth]{figs/actor_loss.svg}}
+    \caption{SAC Actor Loss during Training}
+    \label{fig:actor_loss}
+\end{figure}
+
+\begin{figure}[H]%[ht]
+    \centering
+    {\fontsize{8}{11}\selectfont\includesvg[width=\textwidth]{figs/critic_loss.svg}}
+    \caption{SAC Critic Loss during Training}
+    \label{fig:critic_loss}
+\end{figure}
+
+\autoref{fig:entropy_coefficient} shows the evolution of the entropy coefficient during training. A higher entropy coefficient indicates increased exploration of the environment by the model. Considering the reward components in \autoref{fig:reward_components}, the entropy coefficient initially descreases as the model learns to maximize the position and orientation reward but then increases again as the model tries to maximize the bonus reward. 
+
+\begin{figure}[H]%[ht]
+    \centering
+    {\fontsize{8}{11}\selectfont\includesvg[width=\textwidth]{figs/entropy_coefficient.svg}}
+    \caption{SAC Entropy Coefficient during Training}
+    \label{fig:entropy_coefficient}
+\end{figure}
+
+\begin{figure}[H]%[ht]
+    \centering
+    {\fontsize{8}{11}\selectfont\includesvg[width=\textwidth]{figs/reward_components.svg}}
+    \caption{SAC Episode Reward Components Mean (Max 50) during Training}
+    \label{fig:reward_components}
+\end{figure}
+
+\autoref{fig:reward} and \autoref{fig:success_rate} show the evolution of the episode reward mean and the success rate during training. The success rate is calculated as the percentage of episodes where the episode is successful which also corresponds to the episodes where there is bonus reward. The success rate is a good indicator of how well the model is learning to reach the goal. Considering that the maximum reward in a single episode is $50$, the model was able to reach a reward close to the maximum. Additionally, the fact that the validation reward is higher than the training reward is expected given that the in the trainig episodes the model attempts to explore the environment according to its entropy while in the validation episodes the model takes the best actions according to its learned policy.
+
+\begin{figure}[H]%[ht]
+    \centering
+    {\fontsize{8}{11}\selectfont\includesvg[width=\textwidth]{figs/reward.svg}}
+    \caption{SAC Episode Reward Mean (Max 50) during Training}
+    \label{fig:reward}
+\end{figure}
+
+\begin{figure}[H]%[ht]
+    \centering
+    {\fontsize{8}{11}\selectfont\includesvg[width=\textwidth]{figs/success_rate.svg}}
+    \caption{SAC Success Rate during Training}
+    \label{fig:success_rate}
+\end{figure}
+
+\autoref{tab:sac_results} shows the results when the best model was saved.
 
 \begin{table}[ht] 
 \centering
@@ -73,6 +121,4 @@ A SAC model was trained on the developed environment with a fixed initial robot 
 \bottomrule
 \end{tabular}
 \end{table}
-
-Considering that the maximum reward in a single episode is $50$, the model was able to reach a reward close to the maximum. Additionally, the fact that the validation reward is higher than the training reward is expected given that the in the trainig episodes the model attempts to explore the environment according to its entropy while in the validation episodes the model takes the best actions according to its learned policy.
 
