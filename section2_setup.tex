@@ -61,7 +61,9 @@ The collaborative robot available for this work is a UR10e model which was devel
 
 Both the robot and the gripper have ROS packages containing their drivers making their integration easier. The planning and execution of the arm movements are done through the MoveIt\footnote{MoveIt documentation: \url{https://ros-planning.github.io/moveit_tutorials}} framework, which is a widely-used open-source framework for robotics applications involving motion planning, manipulation, 3D perception, kinematics, control, navigation, and collision checking, with OMPL being chosen to handle the motion planning tasks.
 
-The configurations of the drivers and MoveIt was already done by other members of the AUGMANITY project and can be found on Github\footnote{Github LarCC Repository: \url{https://github.com/afonsocastro/larcc_interface}} along with a higher-level API that encloses that logic.
+The configurations of the drivers and MoveIt was already done by other members of the AUGMANITY project and can be found on Github\footnote{Github LarCC Repository: \url{https://github.com/lardemua/larcc_drivers}} along with a higher-level API that encloses that logic.
+
+In the last part of this work, the $ur\_rtde$\footnote{UR RTDE Documentation: \url{https://sdurobotics.gitlab.io/ur_rtde/index.html}} package was used to control the robot's movements using velocities instead of positions. This package allows to do everything that can be done with teach pendant connected to the robot, such as moving the robot and even turning on and off the free drive mode.
 
 \subsection{Computational Systems}
 
@@ -82,7 +84,7 @@ TensorFlow is one of the most popular machine learning frameworks along with Pyt
     \item \textbf{implement MLOps}: run models in production, tracking their performance and identifying issues.
 \end{itemize}
 
-\subsection{Keypoints Detection}
+\subsection{Keypoints Detection with MediaPipe}
 \label{subsection:keypointdetection}
 
 MediaPipe\footnote{MediaPipe documentation: \url{https://developers.google.com/mediapipe}} consists of a set of libraries and tools to apply AI and Machine Learning techniques in other applications, particularly in pipelines for advanced real-time vision-based applications \cite{Lugaresi2019}. Although it contains many features, in this work the focus is on the Hand and the Pose Landmark Detection Models.
