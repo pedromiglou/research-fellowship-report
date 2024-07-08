@@ -1,1 +1,14 @@
 \section{Introduction}
+
+Human-Robot Collaboration (HRC) is a research topic becoming increasingly important in modern industry, driven by the need to enhance productivity, efficiency, and safety in work environments. The combination of human skills and robotic capabilities provides significant potential to improve the execution of complex and repetitive tasks. However, effective synchronization of actions and seamless communication between partners are open challenges that need to be further addressed.
+
+In collaborative scenarios, assistive robots are designed to work alongside humans in assembly processes or maintenance operations, providing timely support to enhance the overall efficiency of the task. Robots can assist the human worker by delivering a component, tool, or part, by holding a part while the operator works on it, or by performing autonomously a specific sub-task. In any case, the ability of an assistive robot to anticipate the upcoming needs of a human operator plays a pivotal role in supporting efficient teamwork. By anticipating human intentions, actions, and needs, robots can proactively assist or complement human tasks, providing timely support and improving overall efficiency.
+
+In summary, the main objectives of this work are the following:
+\begin{enumerate}
+    \item Optimize existing machine learning models to recognize the objects being grasped by the user by using the right-hand keypoints for real-time applications. Develop a ROS package that integrates the optimized models with the robot controller to provide the necessary information for the robot to anticipate the human partner's intentions.
+
+    \item Develop a reinforcement learning model to plan the robot's movements in real-time. This includes the development of a simulator that resembles the real-world scenario, the training of the model, and the integration of the model with the real robot controller.
+
+    \item Develop a robot controller that is able to control the robot's movements using velocities instead of positions to allow for smoother and more natural movements.
+\end{enumerate}
