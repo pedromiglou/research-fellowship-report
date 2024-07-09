@@ -4,7 +4,7 @@
 \label{subsection:proposal_overview}
 
 % The adopted solution  focuses on detecting and tracking the hand and finger keypoints from visual data. 
-This work proposes a learning-based framework to enable an assistive robot to recognize the object grasped by the human operator. As illustrated in \autoref{fig:LearningFramework}, the proposed framework combines the strengths of MediaPipe in detecting hand landmarks in a RGB image with a deep multi-class classifier that predicts the object based on the configuration of the user’s hand after grasping it. Accordingly, the developed object recognition system operates based on different principles, including the sensing device, the tracking method, and the machine learning approaches. From the point of view of the application in industrial settings, the proposed system has two strengths when compared to the use of data-gloves or electromagnetic motion capture systems. First, the simplicity of installation is associated with a much less complex and costly setup. Second, the non-intrusiveness of the required setup is a valuable factor in accelerating the acceptance of these technologies by humans in carrying out collaborative tasks (a process also referred to as "user adoption"). In contrast, vision-based hand tracking is affected by occlusions, changes in light conditions, and cluttered backgrounds. Furthermore, these problems are difficult to overcome with deep-learning techniques given the data dependency and generalization problems against hands, objects, and lighting conditions outside the training sets. Overall, this paper contributes to advances in understanding the opportunities and limitations of using this novel approach for the recognition of human-grasped objects.
+This work contains a learning-based framework to enable an assistive robot to recognize the object grasped by the human operator. As illustrated in \autoref{fig:LearningFramework}, it combines the strengths of MediaPipe in detecting hand landmarks in a RGB image with a deep multi-class classifier that predicts the object based on the configuration of the user's hand after grasping it. Accordingly, the developed object recognition system operates based on different principles, including the sensing device, the tracking method, and the machine learning approaches. From the point of view of the application in industrial settings, the proposed system has two strengths when compared to the use of data-gloves or electromagnetic motion capture systems. First, the simplicity of installation is associated with a much less complex and costly setup. Second, the non-intrusiveness of the required setup is a valuable factor in accelerating the acceptance of these technologies by humans in carrying out collaborative tasks (a process also referred to as "user adoption"). In contrast, vision-based hand tracking is affected by occlusions, changes in light conditions, and cluttered backgrounds. Furthermore, these problems are difficult to overcome with deep-learning techniques given the data dependency and generalization problems against hands, objects, and lighting conditions outside the training sets. Overall, this paper contributes to advances in understanding the opportunities and limitations of using this novel approach for the recognition of human-grasped objects.
 
 \begin{figure}[ht]
     \centering
@@ -15,24 +15,24 @@ This work proposes a learning-based framework to enable an assistive robot to re
 
 The output of the pre-trained model provides the $(x,y,z)$ coordinates of landmarks for each detected hand. The $(x,y)$ coordinates represent the horizontal and vertical positions of the landmark on the image plane, while the $z$-coordinate represents an estimate of the relative depth with respect to the wrist reference \cite{Amprimo2023}. This work focuses on tracking the right hand by combining the Hand Landmark detection and the Pose Landmark Detection pre-trained models. This strategy proved to be useful to enhance the reliability of the process of extracting the coordinates of the right-hand keypoints from each frame.
 
-The multi-class classifier for object recognition faces several challenges. First, there is limited information about the three-dimensional configuration of the hand, namely if the hand configurations involve overlapping fingers or positions close to each other in the image plane. Consequently, the $z$-coordinate (relative depth) revealed to be a critical element for discriminating complex hand configurations. Second, the coordinates provided by MediaPipe can vary in scale and rotation depending on the hand’s distance from the camera and the hand’s orientation in the image, adding complexity to the task. For these reasons, a deep learning model able to learn complex features directly from the MediaPipe coordinates will be explored and evaluated with a view to its generalization ability in different scenarios and for various users.
+The multi-class classifier for object recognition faces several challenges. First, there is limited information about the three-dimensional configuration of the hand, namely if the hand configurations involve overlapping fingers or positions close to each other in the image plane. Consequently, the $z$-coordinate (relative depth) revealed to be a critical element for discriminating complex hand configurations. Second, the coordinates provided by MediaPipe can vary in scale and rotation depending on the hand's distance from the camera and the hand's orientation in the image, adding complexity to the task. For these reasons, a deep learning model able to learn complex features directly from the MediaPipe coordinates will be explored and evaluated with a view to its generalization ability in different scenarios and for various users.
 
 \subsection{Data Representation}
 \label{section:data_representation}
 
-The four everyday objects selected for this study are all "graspable", i.e., more or less rigid. They include a cylindrical water bottle, a Rubik’s cube, a plier, and a small and sharp screwdriver (\autoref{fig:GraspedObjects}). Given the differences in shape, size, and/or weight, the goal is to discriminate these four objects based on the configuration adopted by the hand while interacting with them.
+The four everyday objects selected for this study are all "graspable", i.e., more or less rigid. They include a cylindrical water bottle, a Rubik's cube, a plier, and a small and sharp screwdriver (\autoref{fig:GraspedObjects}). Given the differences in shape, size, and/or weight, the goal is to discriminate these four objects based on the configuration adopted by the hand while interacting with them.
 
 \begin{figure}[ht]
 \captionsetup{width=0.7\textwidth}
 \centering
 \includegraphics[width=0.7\textwidth]{figs/objects.jpg}
-\caption{The objects used in the study include a water bottle, a Rubik’s cube, a plier, and a screwdriver.}
+\caption{The objects used in the study include a water bottle, a Rubik's cube, a plier, and a screwdriver.}
 \label{fig:GraspedObjects}
 \end{figure}
 
 \subsubsection{Dataset Acquisition}
 
-For this particular problem the dataset was manually collected, consisting of videos where one person would move and rotate a particular object (example frames in \autoref{fig:dataset_examples}). This acquisition involved the participation of three right-handed (male) volunteers aged between 23 and 26 years old. Participants were asked to naturally grab and hold an object placed on a table, followed by executing small movements of the hand in free space. These movements were performed while introducing random variations in the hand’s orientation relative to the RGB camera to ensure diversity in the points of view from which the hand-object interaction is observed.
+For this particular problem the dataset was manually collected, consisting of videos where one person would move and rotate a particular object (example frames in \autoref{fig:dataset_examples}). This acquisition involved the participation of three right-handed (male) volunteers aged between 23 and 26 years old. Participants were asked to naturally grab and hold an object placed on a table, followed by executing small movements of the hand in free space. These movements were performed while introducing random variations in the hand's orientation relative to the RGB camera to ensure diversity in the points of view from which the hand-object interaction is observed.
 
 \begin{figure}[ht]
     \centerline{\includegraphics[width=0.4\textwidth]{figs/dataset_preprocessing1_1.png} \ \includegraphics[width=0.4\textwidth]{figs/dataset_preprocessing1_2.png}}
@@ -42,7 +42,7 @@ For this particular problem the dataset was manually collected, consisting of vi
 
 Naturally, the successive frames could lead to similar grasping patterns from different views. To investigate intra-user variability and to ensure robust model training, users are instructed to perform multiple grasping trials of the selected object across four distinct acquisition sessions. Bearing this in mind, the data acquisition system was designed to facilitate the fast generation of training datasets, accommodating the inclusion of new users and/or additional acquisition sessions. On the one hand, the system is integrated into the workflow of the proposed object recognition framework. On the other hand, it is particularly well-suited for implementation in industrial settings where end-users may not possess extensive expertise in machine learning or computer vision. The instructions provided to users during the data acquisition sessions were intentionally straightforward, ensuring that non-experts could readily participate in the process.
 
-Videos over four sessions per user were recorded at 10 frames per second. For each object and each user, four data acquisition sessions were carried out, which gave rise to the dataset used in the study. Therefore, the dataset consists of a total of \num{11054} samples, distributed practically equally across the three participants (around \num{3600} samples per participant) and the four objects (between \num{2618} and \num{2849} samples per object). The exact number of samples of the entire dataset per class and per user is shown in \autoref{tab:dataset}.
+Videos over four sessions per user were recorded at 10 frames per second. For each object and each user, four data acquisition sessions were carried out, which gave rise to the dataset used in the study. Therefore, the dataset consists of a total of \num{10229} samples, distributed practically equally across the three participants (around \num{3400} samples per participant) and the four objects (between \num{2166} and \num{2784} samples per object). The exact number of samples of the entire dataset per class and per user is shown in \autoref{tab:dataset}.
 
 \begin{table}[ht] 
 \centering
@@ -50,13 +50,13 @@ Videos over four sessions per user were recorded at 10 frames per second. For ea
 \label{tab:dataset}
 \begin{tabular}{lccccc}
 \toprule
-Dataset & Bottle & Cube & Phone & Screwdriver & Total \\
+Dataset & Bottle & Cube & Plier & Screwdriver & Total \\
 \midrule
-User1 & \num{828} & \num{928} & \num{950} & \num{957} & \num{3663}\\
-User2 & \num{886} & \num{926} & \num{939} & \num{946} & \num{3697}\\
-User3 & \num{904} & \num{907} & \num{937} & \num{946} & \num{3694}\\
+User1 & \num{649} & \num{890} & \num{943} & \num{956} & \num{3438}\\
+User2 & \num{771} & \num{836} & \num{872} & \num{898} & \num{3377}\\
+User3 & \num{746} & \num{834} & \num{904} & \num{930} & \num{3414}\\
 \midrule
-Total & \num{2618} & \num{2761} & \num{2826} & \num{2849} & \num{11054}\\
+Total & \num{2166} & \num{2560} & \num{2719} & \num{2784} & \num{10229}\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -92,7 +92,7 @@ P_{norm} = (P - C) \times scaleFactor + 0.5\text{ .}
 
 \subsection{Models}
 
-For this work, the architectures tested were the CNN and the Transformer given their ability at detecting local relations, which makes them an advantageous solution for this problem given that each sample provided to the model is made of the 21 3D points that always follow the same structure representing the right hand. \textcolor{red}{For further details... (cite article)}
+For this work, the architectures tested were the CNN and the Transformer given their ability at detecting local relations, which makes them an advantageous solution for this problem given that each sample provided to the model is made of the 21 3D points that always follow the same structure representing the right hand. For further details on the models, \textcite{Amaral2023} provides a more in-depth description of the models' training and evaluation.
 
 \subsubsection{CNN Classifier}
 \label{subsubsection:cnn_classifier}
@@ -147,73 +147,71 @@ With both models trained, \autoref{table:model_comparison} shows the performance
         \bottomrule
     \end{tabular}
     \captionsetup{width=0.9\textwidth}
-    \caption*{*MNAE: Mean of Normalized Absolute Error\\ *PDJ: average Percentage of Detected Joints\\ *Acc: model Accuracy}
+    \caption*{*MNAE: Mean of Normalized Absolute Error\\ *PDJ: average Percentage of Detected Joints\\ *Acc: Accuracy}
 \end{table}
 
 For the Hand Landmarker, there is only a single option available so it was the one used. Then, for the Pose Landmarker there are three options available but given that it has relatively less relevance and it runs in parallel with the Hand Landmarker, the Full version was used since it has the highest performance while keeping a lower prediction time. Finally, for the object classifier, the CNN presented the highest accuracy and the lowest prediction time so it was selected for further optimizations in real-time.
 
-With all models of the pipeline selected, a test was made in real-time for each object to check the stability and reliability of the model prediction in a certain frame, resulting in the graphics in \autoref{fig:softmaxes}.
+With all models of the pipeline selected, a test was made in real-time for each object to check the stability and reliability of the model prediction in a certain frame, resulting in the graphics in \autoref{fig:bottle_softmaxes}, \autoref{fig:cube_softmaxes}, \autoref{fig:plier_softmaxes} and \autoref{fig:screw_softmaxes}.
 
-\begin{figure}[H]%[ht]
+\begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.8\columnwidth}
-        {\fontsize{8}{10}\selectfont\includesvg[width=\textwidth]{figs/bottle_cnn_softmaxes.svg}}
-        \caption{\centering}
-        % \label{}
-    \end{subfigure}
-    \par\medskip
-    \begin{subfigure}[b]{0.8\columnwidth}
-        {\fontsize{8}{10}\selectfont\includesvg[width=\textwidth]{figs/cube_cnn_softmaxes.svg}}
-        \caption{\centering}
-        % \label{}
-    \end{subfigure}
-    \par\medskip
-    \begin{subfigure}[b]{0.8\columnwidth}
-        {\fontsize{8}{10}\selectfont\includesvg[width=\textwidth]{figs/plier_cnn_softmaxes.svg}}
-        \caption{\centering}
-        % \label{}
-    \end{subfigure}
-    \par\medskip
-    \begin{subfigure}[b]{0.8\columnwidth}
-        {\fontsize{8}{10}\selectfont\includesvg[width=\textwidth]{figs/screwdriver_cnn_softmaxes.svg}}
-        \caption{\centering}
-        % \label{}
-    \end{subfigure}
-    \caption{}
-    \label{fig:softmaxes}
+    {\fontsize{9}{11}\selectfont\includesvg[width=0.98\textwidth]{figs/bottle_cnn_softmaxes.svg}}
+    \caption{Bottle Softmaxes}
+    \label{fig:bottle_softmaxes}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    {\fontsize{9}{11}\selectfont\includesvg[width=0.98\textwidth]{figs/cube_cnn_softmaxes.svg}}
+    \caption{Cube Softmaxes}
+    \label{fig:cube_softmaxes}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    {\fontsize{9}{11}\selectfont\includesvg[width=0.98\textwidth]{figs/plier_cnn_softmaxes.svg}}
+    \caption{Plier Softmaxes}
+    \label{fig:plier_softmaxes}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    {\fontsize{9}{11}\selectfont\includesvg[width=0.98\textwidth]{figs/screwdriver_cnn_softmaxes.svg}}
+    \caption{Screwdriver Softmaxes}
+    \label{fig:screw_softmaxes}
 \end{figure}
 
 These results show that there are a significant number of frames where the model outputs a softmax probability equal or very close to \num{1.0} about the wrong label, especially in the video where the user is holding a plier. Furthermore, these frames are not isolated, sometimes the error happens over multiple consecutive frames making it even harder to establish a rule about when a prediction is valid.
 
-With the unreliability of the softmax probability, the values of the neural network before the softmax operation names logits were tested to ascertain if they would be able to provide additional information, resulting in the graphics in \autoref{fig:logits}.
+With the unreliability of the softmax probability, the values of the neural network before the softmax operation names logits were tested to ascertain if they would be able to provide additional information, resulting in the graphics in \autoref{fig:bottle_logits}, \autoref{fig:cube_logits}, \autoref{fig:plier_logits} and \autoref{fig:screw_logits}.
 
-\begin{figure}[H]%[ht]
+\begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.8\columnwidth}
-        {\fontsize{8}{10}\selectfont\includesvg[width=\textwidth]{figs/bottle_cnn_logits.svg}}
-        \caption{\centering}
-        % \label{}
-    \end{subfigure}
-    \par\medskip
-    \begin{subfigure}[b]{0.8\columnwidth}
-        {\fontsize{8}{10}\selectfont\includesvg[width=\textwidth]{figs/cube_cnn_logits.svg}}
-        \caption{\centering}
-        % \label{}
-    \end{subfigure}
-    \par\medskip
-    \begin{subfigure}[b]{0.8\columnwidth}
-        {\fontsize{8}{10}\selectfont\includesvg[width=\textwidth]{figs/plier_cnn_logits.svg}}
-        \caption{\centering}
-        % \label{}
-    \end{subfigure}
-    \par\medskip
-    \begin{subfigure}[b]{0.8\columnwidth}
-        {\fontsize{8}{10}\selectfont\includesvg[width=\textwidth]{figs/screwdriver_cnn_logits.svg}}
-        \caption{\centering}
-        % \label{}
-    \end{subfigure}
-    \caption{}
-    \label{fig:logits}
+    {\fontsize{9}{11}\selectfont\includesvg[width=0.98\textwidth]{figs/bottle_cnn_logits.svg}}
+    \caption{Bottle Logits}
+    \label{fig:bottle_logits}
 \end{figure}
 
-The results show that across all four classes, when a logit value is higher than six, the model is always giving a correct prediction. This information can be used to create a rule that will only consider the prediction valid if the highest logit value is higher than six. As an extra layer of security, the prediction will only be considered valid if the model gives the same prediction for two consecutive frames. 
+\begin{figure}[H]
+    \centering
+    {\fontsize{9}{11}\selectfont\includesvg[width=0.98\textwidth]{figs/cube_cnn_logits.svg}}
+    \caption{Cube Logits}
+    \label{fig:cube_logits}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    {\fontsize{9}{11}\selectfont\includesvg[width=0.98\textwidth]{figs/plier_cnn_logits.svg}}
+    \caption{Plier Logits}
+    \label{fig:plier_logits}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    {\fontsize{9}{11}\selectfont\includesvg[width=0.98\textwidth]{figs/screwdriver_cnn_logits.svg}}
+    \caption{Screwdriver Logits}
+    \label{fig:screw_logits}
+\end{figure}
+
+The results show that across all four classes, when a logit value is higher than six, the model is always giving a correct prediction for the bottle and cube classes and almost always in the other two. This information can be used to create a rule that will only consider the prediction valid if the highest logit value is higher than six. As an extra layer of security, the prediction will only be considered valid if the model gives the same prediction for two consecutive frames. 
