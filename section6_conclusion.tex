@@ -1,1 +1,11 @@
 \section{Conclusion}
+
+This work aimed to develop a system that allows a robot to anticipate the intentions of a human partner in a collaborative task. The system was divided into three main components: grasping recognition, reinforcement learning, and robot controller.
+
+The grasping recognition component was developed using a pre-trained model that recognizes the objects being grasped by the user from the configuration of the user's hand. The model was optimized to use the right-hand keypoints for real-time applications by taking advantage of consecutive predictions and integrated into a ROS package for easier integration.
+
+In the reinforcement learning component, the simulator was developed to resemble the real-world scenario, allowing for the training of a model that controls the robot's movements until it reaches a goal position. Different reward functions were tested to improve the model's performance, and the model was integrated in ROS to communicate with the real robot controller.
+
+The robot controller component was developed to control the robot's movements using velocities instead of positions to allow for smoother and more natural movements. Tracking the hand position of a human partner, the robot was able to follow the hand with a delay of around 0.05 seconds, showing fluid movements.
+
+Future work includes mainly improving the robot controller to handle goal orientations with the same fluidity as goal positions and then, integrating a more complex reinforcement learning model that can control the robot manipulator in real-time regardless of the position.

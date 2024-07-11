@@ -55,7 +55,9 @@ The collaborative robot available for this work is a UR10e model which was devel
 
 \begin{figure}[ht]
     \centerline{\includegraphics[width=0.4\textwidth]{figs/UR10e.jpg} \ \ \includegraphics[width=0.35\textwidth]{figs/robotiq-2f-140.jpg}}
-    \caption[UR10e Collaborative Robot and Robotiq 2F-140 Gripper]{UR10e Collaborative Robot \cite{UR10e_image} and Robotiq 2F-140 Gripper \cite{robotiq_gripper}}
+    \caption[UR10e Collaborative Robot and Robotiq 2F-140 Gripper]{UR10e Col
+    Parabéns a todos e um agradecimento especial ao Prof. Filipe pelo esforço final que levou este artigo a ser publicado.
+    laborative Robot \cite{UR10e_image} and Robotiq 2F-140 Gripper \cite{robotiq_gripper}}
     \label{fig:ur10e}
 \end{figure}
 
@@ -106,8 +108,20 @@ The Hand Landmark Detection model \cite{Zhang2020} uses two sub-modules: a hand 
     \label{fig:mediapipe_landmarks}
 \end{figure}
 
-\subsection{RL Simulator}
+\subsection{Gymnasium and Mujoco}
 
+In this work, the simulator used from RL training was developed based on a similar one made available by Gymnasium Robotics\footnote{Gymnasium Robotics Documentation: \url{https://robotics.farama.org/index.html}}. The Gymnasium libraries establish an API standard for reinforcement learning environments, facilitating the integration between different simulators and RL algorithms, and also contain a set of environments that can be used to test and train RL algorithms. In the case of Gymnasium Robotics, the environments are focused on robotics tasks and built on top of the Mujoco physics engine\footnote{Mujoco Documentation: \url{https://mujoco.readthedocs.io/en/stable/overview.html}}.
 
-
-\textcolor{red}{Gymnasium and Mujoco}
+\begin{figure}[H]%[ht]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \adjincludegraphics[width=\textwidth, clip]{figs/fetch_reach.png}
+        \caption{}
+    \end{subfigure} \
+    \begin{subfigure}[b]{0.49\textwidth}
+        \adjincludegraphics[width=\textwidth, trim={{0} {0} {.035\width} {0}}, clip]{figs/adroit_hand.png}
+        \caption{}
+    \end{subfigure}
+    \caption[Gymnasium Robotics Environments: Fetch Reach and Adroit Hand.]{Gymnasium Robotics Environments \cite{gymnasium_robotics_docs}: (a) Fetch Reach and (b) Adroit Hand.}
+    \label{fig:gym_robotics}
+\end{figure}

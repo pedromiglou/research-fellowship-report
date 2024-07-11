@@ -1,1 +1,17 @@
-\section{Robot Controller}
+\section{Velocity Controller}
+
+This section covers the implementation of a velocity controller for the robot manipulator and how it was tested. Using velocities instead of positions allows for smoother and more natural movements, which are essential for human-robot collaboration and tracking a moving goal.
+
+\subsection{Implementation}
+
+The velocity controller was implemented using the $ur\_rtde$ Python library. This library allows for real-time communication with the robot controller and, particularly, allows control of the robot's joints using joint angular velocities and also end-effector cartesian and angular velocities. 
+
+\textcolor{red}{justify either joint or cartesian velocities}
+
+For compatibility with the rest of the available infrastructure, the controller was implemented as a ROS node that subscribes to a $/goal$ topic which it then tracks by sending end-effector velocity commands to the robot. If the goal moves to a position that is unreachable by the robot, the controller will stop the robot and wait for the goal to move to a reachable position.
+
+\subsection{Testing}
+
+The velocity controller was tested by commanding the robot to track a moving goal which corresponded to the position of a human hand. Using the calibrated Orbbec Astra Pro above the collaboration cell, the hand centroid was detected using the MediaPipe library. This centroid was then used to create a ZoI on the provided depth image to calculate the 3D position of the hand. The robot was then commanded to track the hand by sending the 3D position of the hand to the ROS $tf$ that the velocity controller node was tracking.
+
+The robot was able to track the hand with a delay of around 0.05 seconds, which is acceptable for human-robot collaboration. Furthermore, it dealt with the moving goal without stopping or slowing down showing fluid movements. However, the hand position tracking does not publish orientation information, which means that the robot was only tracking the hand position and not the hand orientation. This limitation needs to be adressed in future work.

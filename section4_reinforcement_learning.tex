@@ -1,6 +1,6 @@
-\section{Path Planning using Reinforcement Learning}
+\section{Robot Control using Reinforcement Learning}
 
-This section covers the development of a reinforcement learning model to plan the path of a robot manipulator in a collaborative cell. The model was trained and tested in a simulated environment and then a small integration with the real collaborative cell was done to test the model in a real environment. All the code developed for this research is available in the following repository: \url{https://github.com/lardemua/rl-robot-control}.
+This section covers the development of a reinforcement learning model to control a robot manipulator in a collaborative cell with the end objective of continuously track a moving goal. This objective is something that the current solution with MoveIt! fails to achive given that it expects that a new path planning and execution must be made while the robot is stopped, which results in a very low responsiveness with a moving goal with the robot constantly completely stopping when changing its trajectory. The model was trained and tested in a simulated environment and then a small integration with the real collaborative cell was done to test the model in a real environment. All the code developed for this research is available in the following repository: \url{https://github.com/lardemua/rl-robot-control}.
 
 \subsection{Simulated Environment}
 
@@ -189,9 +189,9 @@ With the best weights defined, an attempt was made to train the model with a ran
 The best trained model was integrated with the ROS environment to do some initial tests in the real collaborative cell. Given the specific dependencies of the software used, this integration was done by using a docker container with ROS Noetic, stablebaselines3, and Gymnasium. As shown in \autoref{fig:ros_rl_flow}, a reinforcement learning model is loaded in a ROS node and whenever a new target position and orientation is received from the ROS environment, the model would predict the actions to reach the goal in the simulated environment. The final joint positions in the simulator are then sent to the ROS environment where another node is responsible by the robot's movements.
 
 \begin{figure}[ht]
-    \centerline{\includegraphics[width=\textwidth]{figs/ros_rl_flow.png}}
+    \centerline{\includegraphics[width=0.95\textwidth]{figs/ros_rl_flow.png}}
     \caption{Reinforcement Learning Integration with ROS}
     \label{fig:ros_rl_flow}
 \end{figure}
 
-This solution only replaces the computation of inverse or differential kynematics and still needs to be improved to not only completely replace MoveIt! but also to allow for real-time feedback, which would require a model capable of starting from different robot states.
+This solution was developed as a proof of concept to evaluate the feasibility of using reinforcement learning to control the robot manipulator in the collaborative cell and the problems that could emerge. In the current conditions, using the reinforcement learning model to plan the robot's path is feasable but only for goals in a certain volume and the model cannot handle moving goals. Moving forward, the model would need to be improved to handle real-time control and to be able to start from different robot states. However, the current communication infrastructure with the robot also does not allow for real-time control which would be necessary for the model to be able to handle moving goals.
