@@ -1,4 +1,5 @@
-\section{Robot Control using Reinforcement Learning}
+\section{Simulated Deep Reinforcement Learning for Object Grasping}
+\label{section:deep_reinforcement_learning}
 
 This section covers the development of a reinforcement learning model to control a robot manipulator in a collaborative cell with the end objective of continuously track a moving goal. This objective is something that the current solution with MoveIt! fails to achive given that it expects that a new path planning and execution must be made while the robot is stopped, which results in a very low responsiveness with a moving goal with the robot constantly completely stopping when changing its trajectory. The model was trained and tested in a simulated environment and then a small integration with the real collaborative cell was done to test the model in a real environment. All the code developed for this research is available in the following repository: \url{https://github.com/lardemua/rl-robot-control}.
 
@@ -12,7 +13,7 @@ The environment used for model training was based on the Fetch Reach environment
     \label{fig:fetch_reach_env}
 \end{figure}
 
-The Fetch Reach environment served as a starting point for this research but ended up being mostly rewritten to not only resemble the available collaborative cell but also allow for direct joint control instead of the previous cartesian displacements. The final environment, now named Larcc, can be seen in \autoref{fig:larcc_env} which now includes a UR10e robot model with a Robotiq 2F-140 gripper just like in the real collaborative cell. The UR10e model was obtained from Menagerie, a collection of models for Mujoco curated by Google DeepMind\footnote{UR10e Model from Menagerie: \url{https://github.com/google-deepmind/mujoco_menagerie/tree/main/universal_robots_ur10e}} while the gripper model was obtained from the robosuite framework by 
+The Fetch Reach environment served as a starting point for this research but ended up being mostly rewritten to not only resemble the available collaborative cell but also allow for direct joint control instead of the previous cartesian displacements. The final environment, now named Larcc, can be seen in \autoref{fig:larcc_env} which now includes a UR10e robot model with a Robotiq 2F-140 gripper just like in the real collaborative cell. The UR10e model was obtained from Menagerie, a collection of models for Mujoco curated by Google DeepMind\footnote{UR10e Model from Menagerie: \url{https://github.com/google-deepmind/mujoco_menagerie/tree/main/universal_robots_ur10e}} while the gripper model was obtained from the robosuite framework by
 ARISE Initiative\footnote{Robotiq 2F-140 Model from robosuite: \url{https://github.com/ARISE-Initiative/robosuite/blob/master/robosuite/models/assets/grippers/robotiq_gripper_140.xml}}. The models used were edited so they could be used together, and the final environment was deemed acceptable given that the difference between the end-effector position in ROS and in the simulator differ by less than 1mm for the same joint positions. In this environment, the goal is to move the end-effector to a target position and orientation which are both represented by 3D axes in the simulator. As the actions affect the joints directly, a model trained is this environment ends up replacing the inverse or differential kinematics.
 
 \begin{figure}[H]%[ht]
@@ -54,12 +55,12 @@ The used environment has dense rewards so as to give the agent frequent and cons
                 -1 & \text{otherwise}
             \end{cases};
         \]
-    
+
     \item $orientation\_reward$: \[
             max\left(
             \begin{cases}
                 innerproduct(goal\_quaternion, end$-$effector\_quaternion) \text{,}\\
-                innerproduct(-goal\_quaternion, end$-$effector\_quaternion) 
+                innerproduct(-goal\_quaternion, end$-$effector\_quaternion)
             \end{cases}\right)\text{;}
         \]
     \item $bonus\_reward$: \[
@@ -103,7 +104,7 @@ A SAC model was trained on the developed environment with a fixed initial robot 
     \label{fig:critic_loss}
 \end{figure}
 
-\autoref{fig:entropy_coefficient} shows the evolution of the entropy coefficient during training. A higher entropy coefficient indicates increased exploration of the environment by the model. Considering the reward components in \autoref{fig:reward_components}, the entropy coefficient initially descreases as the model learns to maximize the position and orientation reward but then increases again as the model tries to maximize the bonus reward. 
+\autoref{fig:entropy_coefficient} shows the evolution of the entropy coefficient during training. A higher entropy coefficient indicates increased exploration of the environment by the model. Considering the reward components in \autoref{fig:reward_components}, the entropy coefficient initially descreases as the model learns to maximize the position and orientation reward but then increases again as the model tries to maximize the bonus reward.
 
 \begin{figure}[H]%[ht]
     \centering
@@ -139,7 +140,7 @@ A SAC model was trained on the developed environment with a fixed initial robot 
 
 As said before, the graphs above correspond to the model trained with a $0.5$ weight on the position reward and a $0.25$ weight on the orientation and on the bonus reward. Further testing was done with the model to check which would be the best weights to balance the position and orientation reward components. \autoref{tab:sac_results_weights} shows the results for all tested weights, when the highest validation mean episode reward was recorded. The results show that the best weights are a $0.5$ weight on the position reward and a $0.25$ weight on the orientation reward, which is the same as the initial model. The other tested weights resulted in not only lower rewards but also on longer trainings.
 
-\begin{table}[H]%[ht] 
+\begin{table}[H]%[ht]
 \centering
 \caption{SAC Results with Different Reward Component Weights}
 \label{tab:sac_results_weights}
@@ -168,7 +169,7 @@ As said before, the graphs above correspond to the model trained with a $0.5$ we
 
 \subsubsection{Random Initial Position Results}
 
-With the best weights defined, an attempt was made to train the model with a random but valid starting position. The results were significantly worse than using a fixed starting position. \autoref{fig:reward_rp} and \autoref{fig:success_rate} shows the evolution of the episode reward mean and the success rate. The model was not able to reach a reward close to the maximum and the success rate peaked at $0.5$ around the 170000 training episodes and then decreased until 0 as the reward slowly decreased. 
+With the best weights defined, an attempt was made to train the model with a random but valid starting position. The results were significantly worse than using a fixed starting position. \autoref{fig:reward_rp} and \autoref{fig:success_rate} shows the evolution of the episode reward mean and the success rate. The model was not able to reach a reward close to the maximum and the success rate peaked at $0.5$ around the 170000 training episodes and then decreased until 0 as the reward slowly decreased.
 
 \begin{figure}[H]%[ht]
     \centering

@@ -1,10 +1,19 @@
-\section{Velocity Controller}
+\section{Comparative Analysis of Robot Control Techniques}
+\label{section:robot_control_techniques}
 
-This section covers the implementation of a velocity controller for the robot manipulator and how it was tested. Using velocities instead of positions allows for smoother and more natural movements, which are essential for human-robot collaboration and tracking a moving goal.
+This section covers the study and implementation of velocity controllers for the robot manipulator as alternatives to MoveIt. Using velocities instead of positions allows for smoother and more natural movements, which are essential for human-robot collaboration and tracking a moving goal.
 
-\subsection{Implementation}
+\subsection{Robot Communication}
 
-The velocity controller was implemented using the $ur\_rtde$ Python library. This library allows for real-time communication with the robot controller and, particularly, allows control of the robot's joints using joint angular velocities and also end-effector cartesian and angular velocities. 
+The available code for controlling the UR10e robot manipulator used the MoveIt package, which would then use the ur\_robot\_driver ROS package to communicate with the robot controller. This kind of communication
+
+The UR10e robot manipulator has two forms of communication available: the Universal Robots Real-Time Data Exchange (RTDE) interface and the Universal Robots Secondary Client Interface (SCI).
+
+The RTDE interface allows for real-time communication with the robot controller, while the SCI interface allows for more complex communication, such as sending scripts to the robot controller.
+
+\subsection{Velocity-Based Controller}
+
+The velocity controller was implemented using the $ur\_rtde$ Python library. This library allows for real-time communication with the robot controller and, particularly, allows control of the robot's joints using joint angular velocities and also end-effector cartesian and angular velocities.
 
 \textcolor{red}{justify either joint or cartesian velocities}
 

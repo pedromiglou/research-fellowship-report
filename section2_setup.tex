@@ -1,7 +1,7 @@
 \section{Experimental Setup}
 \label{section:system_architecture}
 
-The work described in this dissertation is part of the AUGMANITY project\footnote{AUGMANITY website: \url{https://www.augmanity.pt}} that aims to develop technologies to support people operating in industrial environments. The experimental setup comprises the integration of both hardware and software components in a prototype collaborative cell (LARCC) at the Laboratory for Automation and Robotics (LAR) located in the Department of Mechanical Engineering at the University of Aveiro, as illustrated in \autoref{fig:LARCC}. The LARCC is equipped with a UR10e collaborative robot and multimodal sensor devices, including three LiDAR Velodyne sensors and four Orbbec 3D cameras distributed throughout the work volume. The software architecture is built upon the ROS middleware \cite{Quigley2009}, providing a robust framework for communication and coordination among the various components. In this context, this section provides a description of the materials used during this study and the methodological approaches followed to face the key challenges. 
+The experimental setup comprises the integration of both hardware and software components in a prototype collaborative cell (LARCC) at the Laboratory for Automation and Robotics (LAR) located in the Department of Mechanical Engineering at the University of Aveiro, as illustrated in \autoref{fig:LARCC}. The LARCC is equipped with a UR10e collaborative robot and multimodal sensor devices, including three LiDAR Velodyne sensors and four Orbbec 3D cameras distributed throughout the work volume. The software architecture is built upon the ROS middleware\cite{Quigley2009}, providing a robust framework for communication and coordination among the various components. In this context, this section provides a description of the materials and tools used during this work.
 
 \begin{figure}[ht]
     \centering
@@ -31,7 +31,7 @@ ROS\cite{ROS2}\footnote{ROS 1 documentation: \url{https://wiki.ros.org}}\footnot
     \item \textbf{simulator support}: ROS has support for simulators with Gazebo being the most common.
 \end{itemize}
 
-For this system, the ROS 1 Noetic distribution was chosen over the more recent ROS 2 distributions so as to take advantage of work already done by other members of the AUGMANITY project at the University of Aveiro.
+For this system, the ROS 1 Noetic distribution was chosen over the more recent ROS 2 distributions so as to take advantage of work already done by other members of the laboratory.
 
 \subsection{Perception System}
 \label{subsection:perception_system}
@@ -55,15 +55,13 @@ The collaborative robot available for this work is a UR10e model which was devel
 
 \begin{figure}[ht]
     \centerline{\includegraphics[width=0.4\textwidth]{figs/UR10e.jpg} \ \ \includegraphics[width=0.35\textwidth]{figs/robotiq-2f-140.jpg}}
-    \caption[UR10e Collaborative Robot and Robotiq 2F-140 Gripper]{UR10e Col
-    Parabéns a todos e um agradecimento especial ao Prof. Filipe pelo esforço final que levou este artigo a ser publicado.
-    laborative Robot \cite{UR10e_image} and Robotiq 2F-140 Gripper \cite{robotiq_gripper}}
+    \caption[UR10e Collaborative Robot and Robotiq 2F-140 Gripper]{UR10e Collaborative Robot \cite{UR10e_image} and Robotiq 2F-140 Gripper \cite{robotiq_gripper}}
     \label{fig:ur10e}
 \end{figure}
 
 Both the robot and the gripper have ROS packages containing their drivers making their integration easier. The planning and execution of the arm movements are done through the MoveIt\footnote{MoveIt documentation: \url{https://ros-planning.github.io/moveit_tutorials}} framework, which is a widely-used open-source framework for robotics applications involving motion planning, manipulation, 3D perception, kinematics, control, navigation, and collision checking, with OMPL being chosen to handle the motion planning tasks.
 
-The configurations of the drivers and MoveIt was already done by other members of the AUGMANITY project and can be found on Github\footnote{Github LarCC Repository: \url{https://github.com/lardemua/larcc_drivers}} along with a higher-level API that encloses that logic.
+The configurations of the drivers and MoveIt was already done by other members of the laboratory and can be found on Github\footnote{Github LarCC Repository: \url{https://github.com/lardemua/larcc_drivers}} along with a higher-level API that encloses that logic.
 
 In the last part of this work, the $ur\_rtde$\footnote{UR RTDE Documentation: \url{https://sdurobotics.gitlab.io/ur_rtde/index.html}} package was used to control the robot's movements using velocities instead of positions. This package allows to do everything that can be done with teach pendant connected to the robot, such as moving the robot and even turning on and off the free drive mode.
 
@@ -108,7 +106,7 @@ The Hand Landmark Detection model \cite{Zhang2020} uses two sub-modules: a hand 
     \label{fig:mediapipe_landmarks}
 \end{figure}
 
-\subsection{Gymnasium and Mujoco}
+\subsection{Simulation Tools for Reinforcement Learning}
 
 In this work, the simulator used from RL training was developed based on a similar one made available by Gymnasium Robotics\footnote{Gymnasium Robotics Documentation: \url{https://robotics.farama.org/index.html}}. The Gymnasium libraries establish an API standard for reinforcement learning environments, facilitating the integration between different simulators and RL algorithms, and also contain a set of environments that can be used to test and train RL algorithms. In the case of Gymnasium Robotics, the environments are focused on robotics tasks and built on top of the Mujoco physics engine\footnote{Mujoco Documentation: \url{https://mujoco.readthedocs.io/en/stable/overview.html}}.
 

@@ -13,6 +13,7 @@
 \usepackage{adjustbox} % for \adjincludegraphics
 \usepackage{multirow} % for multirow tables
 \usepackage[backend=biber, style=ieee, sorting=none, natbib=true, mincitenames=1, maxcitenames=2]{biblatex} % biblatex config like in the dissertation
+\usepackage{cleveref} % for autoref with capital letter
 \bibliography{refs}
 \usepackage[inkscapeformat=pdf]{svg} % svg support
 
@@ -20,7 +21,7 @@
 
 % \DeclareUnicodeCharacter{2212}{-} % fix error LaTeX Error: Unicode character − (U+2212)
 
-\title{Reinforcement Learning for Human Intention Anticipation in Collaborative Tasks}
+\title{Advanced Computational Tools for Collaborative Robotics}
 \author{
 	Pedro Miguel Loureiro Amaral\\
 	\\
@@ -36,12 +37,13 @@
 
 \renewcommand\thesection{\arabic{section}}
 
-\input{section1_introduction.tex}
-\input{section2_setup.tex}
-\input{section3_grasping_recognition}
-\input{section4_reinforcement_learning}
-\input{section5_robot_controller}
-\input{section6_conclusion}
+\abstract{
+    This report presents the work developed during the research fellowship at the Institute of Electronics and Informatics Engineering of Aveiro (IEETA), in the context of project UIDB/00127/2020. The research focused on three main areas inside collaborative robotics: human intention anticipation, deep reinforcement learning for robot control, and exploration of robot control techniques beyond MoveIt. In the first area, existing machine learning models were optimised to recognize the objects being grasped by the user by using the right-hand grasping pattern for real-time applications. In the second area, reinforcement learning models were developed to control the robot's movements towards a given goal in real-time. In the third area, alternatives for robot control were studied with a focus on velocity control instead of position control to allow for smoother and more natural movements. All the developed software is available as ROS packages so that it could be easily integrated and used in future works.
+}
+
+\tableofcontents
+
+\newpage
 
 \if{0}
 \color{red}
@@ -76,6 +78,13 @@ T4.Tarefa 4 - Escrita de documentação relevante e preparação de um protótip
 
 \color{black}
 \fi
+
+\input{section1_introduction.tex}
+\input{section2_setup.tex}
+\input{section3_grasping_recognition}
+\input{section4_reinforcement_learning}
+\input{section5_robot_controller}
+\input{section6_conclusion}
 
 \begingroup
 \renewcommand{\bibfont}{\footnotesize}

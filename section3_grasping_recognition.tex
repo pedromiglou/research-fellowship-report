@@ -1,10 +1,16 @@
-\section{Learning-Based Recognition of Human-Grasped Objects}
+\section{Anticipation of Human Needs through Hand Posture Recognition}
+\label{section:human_intention_anticipation}
 
-\subsection{Proposed Approach}
+This work contains a learning-based framework to enable an assistive robot to recognize the object grasped by the human operator. This section will start by covering the development of this framework, and then it will present the real-time anticipation system that integrates the object recognition module to predict the operator's needs.
+
+\subsection{Learning-based Recognition of Human Grasped\\Objects}
 \label{subsection:proposal_overview}
 
-% The adopted solution  focuses on detecting and tracking the hand and finger keypoints from visual data. 
-This work contains a learning-based framework to enable an assistive robot to recognize the object grasped by the human operator. As illustrated in \autoref{fig:LearningFramework}, it combines the strengths of MediaPipe in detecting hand landmarks in a RGB image with a deep multi-class classifier that predicts the object based on the configuration of the user's hand after grasping it. Accordingly, the developed object recognition system operates based on different principles, including the sensing device, the tracking method, and the machine learning approaches. From the point of view of the application in industrial settings, the proposed system has two strengths when compared to the use of data-gloves or electromagnetic motion capture systems. First, the simplicity of installation is associated with a much less complex and costly setup. Second, the non-intrusiveness of the required setup is a valuable factor in accelerating the acceptance of these technologies by humans in carrying out collaborative tasks (a process also referred to as "user adoption"). In contrast, vision-based hand tracking is affected by occlusions, changes in light conditions, and cluttered backgrounds. Furthermore, these problems are difficult to overcome with deep-learning techniques given the data dependency and generalization problems against hands, objects, and lighting conditions outside the training sets. Overall, this paper contributes to advances in understanding the opportunities and limitations of using this novel approach for the recognition of human-grasped objects.
+The solution adopted in our work focuses on detecting and tracking the hand and finger key points from visual data. The proposed framework combines the strengths of Mediapipe in detecting hand landmarks in an RGB image with a deep multi-class classifier that predicts the grasped object from a set of 21 key points, as illustrated in \autoref{fig:LearningFramework}. This focus on hand–object interaction (HOI) allows for a computationally efficient and real-time applicable strategy for intention anticipation, particularly suited for industrial collaborative tasks.
+%This work combines the strengths of MediaPipe in detecting hand landmarks in a RGB image with a deep multi-class classifier that predicts the object based on the configuration of the user's hand after grasping it, as illustrated in \autoref{fig:LearningFramework}.
+%Accordingly, the developed object recognition system operates based on different principles, including the sensing device, the tracking method, and the machine learning approaches.
+%From the point of view of the application in industrial settings, the proposed system has two strengths when compared to the use of data-gloves or electromagnetic motion capture systems. First, the simplicity of installation is associated with a much less complex and costly setup. Second, the non-intrusiveness of the required setup is a valuable factor in accelerating the acceptance of these technologies by humans in carrying out collaborative tasks (a process also referred to as "user adoption"). In contrast, vision-based hand tracking is affected by occlusions, changes in light conditions, and cluttered backgrounds. Furthermore, these problems are difficult to overcome with deep-learning techniques given the data dependency and generalization problems against hands, objects, and lighting conditions outside the training sets.
+%Overall, this paper contributes to advances in understanding the opportunities and limitations of using this novel approach for the recognition of human-grasped objects.
 
 \begin{figure}[ht]
     \centering
@@ -13,11 +19,11 @@ This work contains a learning-based framework to enable an assistive robot to re
     \label{fig:LearningFramework}
 \end{figure}
 
-The output of the pre-trained model provides the $(x,y,z)$ coordinates of landmarks for each detected hand. The $(x,y)$ coordinates represent the horizontal and vertical positions of the landmark on the image plane, while the $z$-coordinate represents an estimate of the relative depth with respect to the wrist reference \cite{Amprimo2023}. This work focuses on tracking the right hand by combining the Hand Landmark detection and the Pose Landmark Detection pre-trained models. This strategy proved to be useful to enhance the reliability of the process of extracting the coordinates of the right-hand keypoints from each frame.
+The output of the MediaPipe's pre-trained models provide the $(x,y,z)$ coordinates of landmarks for each detected hand. The $(x,y)$ coordinates represent the horizontal and vertical positions of the landmark on the image plane, while the $z$-coordinate represents an estimate of the relative depth with respect to the wrist reference \cite{Amprimo2023}. This work focuses on tracking the right hand by combining the Hand Landmark detection and the Pose Landmark Detection pre-trained models. This strategy proved to be useful to enhance the reliability of the process of extracting the coordinates of the right-hand keypoints from each frame.
 
-The multi-class classifier for object recognition faces several challenges. First, there is limited information about the three-dimensional configuration of the hand, namely if the hand configurations involve overlapping fingers or positions close to each other in the image plane. Consequently, the $z$-coordinate (relative depth) revealed to be a critical element for discriminating complex hand configurations. Second, the coordinates provided by MediaPipe can vary in scale and rotation depending on the hand's distance from the camera and the hand's orientation in the image, adding complexity to the task. For these reasons, a deep learning model able to learn complex features directly from the MediaPipe coordinates will be explored and evaluated with a view to its generalization ability in different scenarios and for various users.
+%The multi-class classifier for object recognition faces several challenges. First, there is limited information about the three-dimensional configuration of the hand, namely if the hand configurations involve overlapping fingers or positions close to each other in the image plane. Consequently, the $z$-coordinate (relative depth) revealed to be a critical element for discriminating complex hand configurations. Second, the coordinates provided by MediaPipe can vary in scale and rotation depending on the hand's distance from the camera and the hand's orientation in the image, adding complexity to the task. For these reasons, a deep learning model able to learn complex features directly from the MediaPipe coordinates will be explored and evaluated with a view to its generalization ability in different scenarios and for various users.
 
-\subsection{Data Representation}
+\subsubsection{Dataset Acquisition}
 \label{section:data_representation}
 
 The four everyday objects selected for this study are all "graspable", i.e., more or less rigid. They include a cylindrical water bottle, a Rubik's cube, a plier, and a small and sharp screwdriver (\autoref{fig:GraspedObjects}). Given the differences in shape, size, and/or weight, the goal is to discriminate these four objects based on the configuration adopted by the hand while interacting with them.
@@ -29,8 +35,6 @@ The four everyday objects selected for this study are all "graspable", i.e., mor
 \caption{The objects used in the study include a water bottle, a Rubik's cube, a plier, and a screwdriver.}
 \label{fig:GraspedObjects}
 \end{figure}
-
-\subsubsection{Dataset Acquisition}
 
 For this particular problem the dataset was manually collected, consisting of videos where one person would move and rotate a particular object (example frames in \autoref{fig:dataset_examples}). This acquisition involved the participation of three right-handed (male) volunteers aged between 23 and 26 years old. Participants were asked to naturally grab and hold an object placed on a table, followed by executing small movements of the hand in free space. These movements were performed while introducing random variations in the hand's orientation relative to the RGB camera to ensure diversity in the points of view from which the hand-object interaction is observed.
 
@@ -44,7 +48,7 @@ Naturally, the successive frames could lead to similar grasping patterns from di
 
 Videos over four sessions per user were recorded at 10 frames per second. For each object and each user, four data acquisition sessions were carried out, which gave rise to the dataset used in the study. Therefore, the dataset consists of a total of \num{10229} samples, distributed practically equally across the three participants (around \num{3400} samples per participant) and the four objects (between \num{2166} and \num{2784} samples per object). The exact number of samples of the entire dataset per class and per user is shown in \autoref{tab:dataset}.
 
-\begin{table}[ht] 
+\begin{table}[ht]
 \centering
 \caption{Number of samples in the dataset per class and user}
 \label{tab:dataset}
@@ -61,7 +65,7 @@ Total & \num{2166} & \num{2560} & \num{2719} & \num{2784} & \num{10229}\\
 \end{tabular}
 \end{table}
 
-\subsubsection{Preprocessing}
+\subsubsection{Dataset Preprocessing}
 
 After having a dataset, the data had to be processed to have a fitting structure to be used in the model training. The images from the videos were processed using the Mediapipe hands model resulting in 21 points for each hand detected (\autoref{fig:dataset_examples2}).
 
@@ -79,7 +83,7 @@ After obtaining the relative coordinates with respect to the reference point, sc
 scaleFactor = \frac {0.5}{\max(\{\lvert x_i \rvert,\lvert y_i \rvert,\lvert z_i\rvert\}: i=1,\cdots,n)} \text{  ,}
 \end{equation}
 %
-where $\{x_i,y_i,z_i\}$ denote relative coordinates. This feature scaling revealed to be a valuable pre-processing step to help make the data more consistent, helping the model to learn the relevant patterns without being influenced by variations in hand position, hand size, or scale. Further, it helps to maximize the separation among keypoints, helping the model to discriminate the output class. Finally, a uniform adjustment is made by adding 0.5 to each coordinate, centering the points between 0 and 1 on the scale. It is important to note that throughout the point processing, the order of the points is never changed, and therefore the models can take advantage of this structure. \autoref{fig:dataset_examples3} shows examples of the normalized keypoints representation expressed according to the previous steps, that is: 
+where $\{x_i,y_i,z_i\}$ denote relative coordinates. This feature scaling revealed to be a valuable pre-processing step to help make the data more consistent, helping the model to learn the relevant patterns without being influenced by variations in hand position, hand size, or scale. Further, it helps to maximize the separation among keypoints, helping the model to discriminate the output class. Finally, a uniform adjustment is made by adding 0.5 to each coordinate, centering the points between 0 and 1 on the scale. It is important to note that throughout the point processing, the order of the points is never changed, and therefore the models can take advantage of this structure. \autoref{fig:dataset_examples3} shows examples of the normalized keypoints representation expressed according to the previous steps, that is:
 \begin{equation}
 P_{norm} = (P - C) \times scaleFactor + 0.5\text{ .}
 \end{equation}
@@ -90,14 +94,14 @@ P_{norm} = (P - C) \times scaleFactor + 0.5\text{ .}
     \label{fig:dataset_examples3}
 \end{figure}
 
-\subsection{Models}
+\subsubsection{Models}
 
 For this work, the architectures tested were the CNN and the Transformer given their ability at detecting local relations, which makes them an advantageous solution for this problem given that each sample provided to the model is made of the 21 3D points that always follow the same structure representing the right hand. For further details on the models, \textcite{Amaral2023} provides a more in-depth description of the models' training and evaluation.
 
-\subsubsection{CNN Classifier}
-\label{subsubsection:cnn_classifier}
+%\subsubsection{CNN Classifier}
+%\label{subsubsection:cnn_classifier}
 
-The developed CNN comprises two convolutional layers each with 64 feature maps and ReLU activation functions. 
+The developed CNN comprises two convolutional layers each with 64 feature maps and ReLU activation functions.
 The first layer uses a kernel size of 3$\times$3 pixels performing a 1D convolution on the 3$\times$21 data with a stride of 1 pixel. The flattened output from the final layer is connected to a dense layer with 128 neurons, followed by another dense layer with the number of neurons equal to the number of classes. The output layer consists of the final connect layer with softmax activation. The softmax function takes a vector of real-valued scores (often called logits) and transforms them into a probability distribution over multiple classes. For the classification task with 4 classes, the output layer has 4 neurons, each representing the probability of the input belonging to a particular class. To prevent overfitting, dropout layers are incorporated after each fully connected layer. The final model can be seen in \autoref{fig:cnn_architecture} and it has \num{156644} trainable parameters. It is made of two convolutional layers followed by three dense layers, with the third being the output layer. Between the convolutional and the dense layers and between both dense layers, there is also a dropout layer to help with overfitting.
 
 \begin{figure}[ht]
@@ -107,8 +111,8 @@ The first layer uses a kernel size of 3$\times$3 pixels performing a 1D convolut
     \label{fig:cnn_architecture}
 \end{figure}
 
-\subsubsection{Transformer Neural Network Classifier}
-\label{subsubsection:transformer_classifier}
+%\subsubsection{Transformer Neural Network Classifier}
+%\label{subsubsection:transformer_classifier}
 
 The developed Transformer model is made of two Transformer encoder stacks (\autoref{fig:transformer_encoder_architecture}) comprised of the following layers: multi-head self-attention, layer normalization, and feedforward neural networks. Within each encoder, multi-head self-attention is applied to capture dependencies among the keypoints, where four attention heads are used for enhanced feature extraction. Following self-attention, two position-wise feedforward neural networks are employed to process the attended features and capture complex patterns. Layer normalization is applied after each sub-layer to stabilize the activations and facilitate training convergence. The resulting architecture can be seen in \autoref{fig:transformer_architecture} and it has \num{16384} trainable parameters.
 
@@ -126,9 +130,23 @@ The developed Transformer model is made of two Transformer encoder stacks (\auto
     \label{fig:transformer_architecture}
 \end{figure}
 
-\subsection{Model Comparison}
+\subsubsection{Model Comparison}
 
-With both models trained, \autoref{table:model_comparison} shows the performance of all the machine learning models involved in this classification task, including those belonging to MediaPipe.
+With both models trained, \autoref{table:model_comparison} shows the performance of all the machine learning models involved in this classification task, including those belonging to MediaPipe. The trained CNN model achieved a high overall accuracy of \SI{90.5}{\%} on the held-out test set, comprising \SI{20}{\%} of the original dataset. Two confusion matrixes were generated to visualize the classification performance of both models for each object class (\autoref{fig:confusion_matrixes}). The diagonal elements represent correctly classified instances, while off-diagonal elements indicate misclassifications between object categories. The confusion matrix highlights the high precision and recall rates for most objects, with some confusion observed between the pliers and the screwdriver in both models. These results show that the CNN model outperforms the Transformer model in terms of accuracy, with the latter achieving an accuracy of \SI{86.7}{\%}. The CNN model also exhibits a faster prediction time of \SI{14.1}{\milli\second} compared to the Transformer model's \SI{16.0}{\milli\second}.
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        {\fontsize{10}{12}\selectfont\includesvg[width=1\textwidth]{figs/cnn_conf_matrix.svg}}
+        \caption{}
+    \end{subfigure} \
+    \begin{subfigure}[b]{0.49\textwidth}
+        {\fontsize{10}{12}\selectfont\includesvg[width=1\textwidth]{figs/transformer_conf_matrix.svg}}
+        \caption{}
+    \end{subfigure}
+    \caption{Confusion Matrixes for Object Classification: (a) CNN Model and (b) Transformer Model.}
+    \label{fig:confusion_matrixes}
+\end{figure}
 
 \begin{table}[H] %[ht]
     \centering
@@ -150,7 +168,11 @@ With both models trained, \autoref{table:model_comparison} shows the performance
     \caption*{*MNAE: Mean of Normalized Absolute Error\\ *PDJ: average Percentage of Detected Joints\\ *Acc: Accuracy}
 \end{table}
 
-For the Hand Landmarker, there is only a single option available so it was the one used. Then, for the Pose Landmarker there are three options available but given that it has relatively less relevance and it runs in parallel with the Hand Landmarker, the Full version was used since it has the highest performance while keeping a lower prediction time. Finally, for the object classifier, the CNN presented the highest accuracy and the lowest prediction time so it was selected for further optimizations in real-time.
+The final selection of models was based on the performance and prediction time of each model. For the Hand Landmarker, there is only a single option available so it was the one used. Then, for the Pose Landmarker there are three options available but given that it has relatively less relevance and it runs in parallel with the Hand Landmarker, the Full version was used since it has the highest performance while keeping a lower prediction time. Finally, for the object classifier, the CNN presented the highest accuracy and the lowest prediction time so it was selected for further optimizations in real-time.
+
+\subsection{Integrating Hand-Object Recognition for Proactive\\Robot Behavior}
+
+\subsubsection{Real-time Object Classification}
 
 With all models of the pipeline selected, a test was made in real-time for each object to check the stability and reliability of the model prediction in a certain frame, resulting in the graphics in \autoref{fig:bottle_softmaxes}, \autoref{fig:cube_softmaxes}, \autoref{fig:plier_softmaxes} and \autoref{fig:screw_softmaxes}.
 
@@ -214,4 +236,19 @@ With the unreliability of the softmax probability, the values of the neural netw
     \label{fig:screw_logits}
 \end{figure}
 
-The results show that across all four classes, when a logit value is higher than six, the model is always giving a correct prediction for the bottle and cube classes and almost always in the other two. This information can be used to create a rule that will only consider the prediction valid if the highest logit value is higher than six. As an extra layer of security, the prediction will only be considered valid if the model gives the same prediction for two consecutive frames. 
+The results show that across all four classes, when a logit value is higher than six, the model is always giving a correct prediction for the bottle and cube classes and almost always in the other two. This information can be used to create a rule that will only consider the prediction valid if the highest logit value is higher than six. As an extra layer of security, the prediction will only be considered valid if the model gives the same prediction for two consecutive frames.
+
+\subsubsection{Anticipatory System}
+
+Subsequently, the object-recognition module was tested in a real-time setting within a collaborative human–robot interaction scenario. The experiments conducted to validate the proposed anticipation system involve a task where the robot assists a human in a tabletop scenario by recognizing objects held in the hand based on their grasping pattern. The experimental setup comprises the UR10e robot, two Orbbec Astra Pro RGB-D cameras, and the set of four objects used in the model training phase positioned on a table. The robot observes the worker’s hand, while the real-time CNN deep model identifies the specific object being grasped. Upon object recognition, the robot delivers the corresponding tool or part to assist the worker.
+
+\textcolor{red}{hand position estimation}
+
+The functional blocks of the anticipatory system were developed separately. The prediction model offers the possibility of incorporating action selection in their planning through a decision-making block. \autoref{fig:anticipatory_arch} illustrates the developed anticipatory system, including the decision-making block and movement planning using the MoveIt library.
+
+\begin{figure}[H] %[ht]
+    \centering
+    {\fontsize{10}{12}\selectfont\includegraphics[width=1\textwidth]{figs/AnticipationArchitecture.pdf}}
+    \caption{Functional blocks of the anticipatory robotic system.}
+    \label{fig:anticipatory_arch}
+\end{figure}
